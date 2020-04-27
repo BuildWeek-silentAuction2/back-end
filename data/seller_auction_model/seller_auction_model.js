@@ -10,5 +10,5 @@ function getAllSellers() {
 };
 
 function getAllAuctions() {
-    return db('auc')
-}
+    return db('auctions')
+};
