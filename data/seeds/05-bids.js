@@ -1,10 +1,10 @@
 
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex('table_name').del()
+  return knex('bids').del()
     .then(function () {
       // Inserts seed entries
-      return knex('table_name').insert([
+      return knex('bids').insert([
         {id: 1, amount: 45.00, time: '2020-04-22 16:54:03', listing_id: 3, bidder_id: 'ed58c719-43cc-44e9-a291-67a02cdc0675'},
         {id: 2, amount: 47.00, time: '2020-04-23 05:06:01', listing_id: 3, bidder_id: '55a37f5e-8845-4fbe-88d9-fa424c0ea600'},
         {id: 3, amount: 50.00, time: '2020-04-23 05:06:05', listing_id: 3, bidder_id: 'ed58c719-43cc-44e9-a291-67a02cdc0675'},
