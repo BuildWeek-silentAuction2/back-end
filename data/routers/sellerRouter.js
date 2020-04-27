@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const db = require();
+const db = require('../seller_auction_model/seller_auction_model');
 
 router.get('/', (req, res) => {
     db.getAllSellers()
@@ -15,60 +15,60 @@ router.get('/', (req, res) => {
         })
 })
 
-router.post('/', (req, res) => {
-    const login = req.body;
-    db.addSeller(login)
-        .then(seller => {
-            //bcyrp here
+// router.post('/', (req, res) => {
+//     const login = req.body;
+//     db.addSeller(login)
+//         .then(seller => {
+//             //bcyrp here
 
-            res.status(200).json({
-                data : seller
-            })
-        })
-        .catch(err => {
-            res.status(400).json({
-                error : err
-            })
-        })
-});
+//             res.status(200).json({
+//                 data : seller
+//             })
+//         })
+//         .catch(err => {
+//             res.status(400).json({
+//                 error : err
+//             })
+//         })
+// });
 
-router.put('/:id', (req, res) => {
-    const { id } = req.params;
-    const changes = req.body;
+// // router.put('/:id', (req, res) => {
+// //     const { id } = req.params;
+// //     const changes = req.body;
   
-    db.findById(id)
-    .then(bid => {
-      if (bid) {
-        db.update(changes, id)
-        .then(updatedSeller => {
-          res.status(200).json({ 
-              data :updatedSeller
-            });
-        });
-      } else {
-        res.status(404).json({ message: 'Could not find seller with given id' });
-      }
-    })
-    .catch (err => {
-      res.status(500).json({ message: 'Failed to update seller' });
-    });
-  });
+// //     db.findById(id)
+// //     .then(bid => {
+// //       if (bid) {
+// //         db.update(changes, id)
+// //         .then(updatedSeller => {
+// //           res.status(200).json({ 
+// //               data :updatedSeller
+// //             });
+// //         });
+// //       } else {
+// //         res.status(404).json({ message: 'Could not find seller with given id' });
+// //       }
+// //     })
+//   //   .catch (err => {
+//   //     res.status(500).json({ message: 'Failed to update seller' });
+//   //   });
+//   // });
 
-router.delete('/:id', (req, res) => {
-    const { id } = req.params;
+// router.delete('/:id', (req, res) => {
+//     const { id } = req.params;
   
-    db.remove(id)
-    .then(deleted => {
-      if (deleted) {
-        res.json({ removed: deleted });
-      } else {
-        res.status(404).json({ message: 'Could not find seller with given id' });
-      }
-    })
-    .catch(err => {
-      res.status(500).json({ message: 'Failed to delete seller' });
-    });
-  });
+//     db.remove(id)
+//     .then(deleted => {
+//       if (deleted) {
+//         res.json({ removed: deleted });
+//       } else {
+//         res.status(404).json({ message: 'Could not find seller with given id' });
+//       }
+//     })
+//     .catch(err => {
+//       res.status(500).json({ message: 'Failed to delete seller' });
+//     });
+//   });
 
   
 
