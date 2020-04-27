@@ -1,6 +1,12 @@
 const router = require('express').Router();
 const db = require('../seller_auction_model/seller_auction_model');
 
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const authenticator = require('../auth/auth-middleware.js');
+const tokenGen = require('../auth/generate-token');
+
 router.get('/', (req, res) => {
     db.getAllBuyers()
         .then(buyer => {
@@ -15,12 +21,32 @@ router.get('/', (req, res) => {
         })
 });
 
-// router.post('/', (req, res) => {
-//     const login = req.body;
-//     db.addBuyer(login)
-//         .then(buyer => {
-//             // bcryp here 
+// // router.post('/', (req, res) => {
+// //     const login = req.body;
+// //     db.addBuyer(login)
+// //         .then(buyer => {
+// //             // bcryp here 
 
+// //             res.status(200).json({
+// //                 data : buyer
+// //             })
+// //         })
+// //         .catch(err => {
+// //             res.status(400).json({
+// //                 error : err
+// //             })
+// //         })
+// // });
+
+// // router.put('/:id', (req, res) => {
+// //     const { id } = req.params;
+// //     const changes = req.body;
+// router.post('/register', (req, res) => {
+//     const newBuyer = req.body;
+//     const hash = bcrypt.hashSync(newBuyer.password, 12);
+//     newBuyer.password = hash;
+//     db.addBuyer(newBuyer)
+//         .then(buyer => { 
 //             res.status(200).json({
 //                 data : buyer
 //             })
@@ -31,6 +57,24 @@ router.get('/', (req, res) => {
 //             })
 //         })
 // });
+
+// router.post('/login', (req, res) => {
+//   const { username, password } = req.body;
+//   db.findById(username)
+//     .then((buyer) => {
+//       if (buyer && bcrypt.compareSync(password, buyer.password)) {
+//         const token = tokenGen(buyer);
+//         res.status(200).json({
+//           message: `Welcome, ${buyer.username}!`,
+//           token
+//         })
+//       } else {
+//         res.status(401).json({
+//           message: 'Invalid credentials.'
+//         })
+//       }
+//     })
+// })
 
 // router.put('/:id', (req, res) => {
 //     const { id } = req.params;
