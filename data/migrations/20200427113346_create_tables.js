@@ -21,7 +21,7 @@ exports.up = function(knex) {
     .createTable('listings', tbl => {
         tbl.increments();
         tbl.string('name').notNullable().unique();
-        tbl.blob('image');
+        tbl.string('image_url');
         tbl.string('description').notNullable();
         tbl.float('starting_price').notNullable();
         tbl.integer('auction_id').references('id').inTable('auctions').notNullable();
