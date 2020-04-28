@@ -2,7 +2,6 @@ const router = require('express').Router();
 const db = require();
 
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
 const authenticator = require('../auth/auth-middleware.js');
 const tokenGen = require('../auth/generate-token');
@@ -30,7 +29,7 @@ router.post('/register', (req, res) => {
             res.status(200).json({
                 data : buyer
             })
-        })
+       })
         .catch(err => {
             res.status(400).json({
                 error : err
@@ -40,7 +39,7 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
-  db.findById(username)
+  db.findByUsername(username)
     .then((buyer) => {
       if (buyer && bcrypt.compareSync(password, buyer.password)) {
         const token = tokenGen(buyer);
