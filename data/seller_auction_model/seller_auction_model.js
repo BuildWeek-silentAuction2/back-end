@@ -70,7 +70,7 @@ function addBid(item) {
 };
 
 function findSellerByUsername(username) {
-    return db('sellers').where({ username })
+    return db('sellers').where({ username }).first()
 };
 
 function findSellerById(id) {

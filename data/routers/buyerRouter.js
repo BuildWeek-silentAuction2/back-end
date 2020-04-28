@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const db = require('../seller_auction_model/seller_auction_model');
+const { uuid } = require('uuidv4')
 
 const bcrypt = require('bcryptjs');
 
@@ -24,6 +25,7 @@ router.post('/register', (req, res) => {
     const newBuyer = req.body;
     const hash = bcrypt.hashSync(newBuyer.password, 12);
     newBuyer.password = hash;
+    newBuyer.id = uuid();
     db.addBuyer(newBuyer)
         .then(buyer => { 
             res.status(200).json({
@@ -53,6 +55,12 @@ router.post('/login', (req, res) => {
           message: 'Invalid credentials.'
         })
       }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        message: 'Unable to authenticate user.'
+      })
     })
 })
 
