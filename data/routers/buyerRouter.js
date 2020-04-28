@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const db = require();
+const db = require('../seller_auction_model/seller_auction_model');
 
 const bcrypt = require('bcryptjs');
 
@@ -39,8 +39,9 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
-  db.findByUsername(username)
-    .then((buyer) => {
+  db.findBuyerByUsername(username)
+    .then(buyer => {
+      console.log(buyer)
       if (buyer && bcrypt.compareSync(password, buyer.password)) {
         const token = tokenGen(buyer);
         res.status(200).json({
@@ -79,7 +80,7 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     const { id } = req.params;
   
-    db.remove(id)
+    db.removeBuyer(id)
     .then(deleted => {
       if (deleted) {
         res.json({ removed: deleted });

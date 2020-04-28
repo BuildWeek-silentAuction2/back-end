@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const db = require();
+const db = require('../seller_auction_model/seller_auction_model');
 
 router.get('/', (req, res) => {
     db.getAllAuctions()
@@ -24,6 +24,7 @@ router.post('/', (req, res) => {
             })
         })
         .catch(err => {
+          console.log(err)
             res.status(400).json({
                 error : err
             })
@@ -33,15 +34,21 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     const changes = req.body;
-  
-    db.findById(id)
+    db.findAuctionById(id)
     .then(auction => {
-      if (bid) {
-        db.update(changes, id)
+      
+      if (auction) {
+        db.updateAuction(id, changes)
         .then(updatedAuction => {
+          console.log(updatedAuction)
           res.status(200).json({
-              data : updateAuction
+              data : updatedAuction
             });
+        })
+        .catch(err => {
+          res.status(400).json({
+            error : 'couldnt change records'
+          })
         });
       } else {
         res.status(404).json({ message: 'Could not find auction with given id' });
@@ -55,7 +62,7 @@ router.put('/:id', (req, res) => {
   router.delete('/:id', (req, res) => {
     const { id } = req.params;
   
-    db.remove(id)
+    db.removeAuction(id)
     .then(deleted => {
       if (deleted) {
         res.json({ removed: deleted });
