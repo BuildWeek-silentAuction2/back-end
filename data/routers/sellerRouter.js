@@ -69,6 +69,10 @@ router.post('/login', (req, res) => {
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     const changes = req.body;
+    if (changes.password) {
+      const hash = bcrypt.hashSync(changes.password, 12);
+      changes.password = hash;
+    }
     db.findSellerById(id)
     .then(bid => {
       if (bid) {
