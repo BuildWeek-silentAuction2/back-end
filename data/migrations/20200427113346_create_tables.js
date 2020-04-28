@@ -20,7 +20,7 @@ exports.up = function(knex) {
     })
     .createTable('listings', tbl => {
         tbl.increments();
-        tbl.string('name').notNullable().unique();
+        tbl.string('name').notNullable();
         tbl.string('image_url');
         tbl.string('description').notNullable();
         tbl.float('starting_price').notNullable();
