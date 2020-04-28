@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const db = require('../seller_auction_model/seller_auction_model');
+const { uuid } = require('uuidv4')
 
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
 const authenticator = require('../auth/auth-middleware.js');
 const tokenGen = require('../auth/generate-token');
@@ -25,15 +25,14 @@ router.post('/register', (req, res) => {
     const newBuyer = req.body;
     const hash = bcrypt.hashSync(newBuyer.password, 12);
     newBuyer.password = hash;
+    newBuyer.id = uuid();
     db.addBuyer(newBuyer)
         .then(buyer => { 
-          console.log('buyer', buyer)
             res.status(200).json({
                 data : buyer
             })
-        })
+       })
         .catch(err => {
-          console.log(err)
             res.status(400).json({
                 error : err
             })
@@ -58,12 +57,33 @@ router.post('/login', (req, res) => {
       }
     })
     .catch(err => {
-      console.log(err)
+      console.error(err);
       res.status(500).json({
-        error : err
+        message: 'Unable to authenticate user.'
       })
     })
-});
+})
+
+router.put('/:id', (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+  
+    db.findById(id)
+    .then(bid => {
+      if (bid) {
+        db.update(changes, id)
+        .then(updatedBuyer => {
+          res.status(200).json({ data : updatedBuyer});
+        });
+      } else {
+        res.status(404).json({ message: 'Could not find buyer with given id' });
+      }
+    })
+    .catch (err => {
+      res.status(500).json({ message: 'Failed to update buyer' });
+    });
+  });
+
 
 router.delete('/:id', (req, res) => {
     const { id } = req.params;
@@ -80,7 +100,5 @@ router.delete('/:id', (req, res) => {
       res.status(500).json({ message: 'Failed to delete buyer' });
     });
   });
-
-
 
 module.exports = router;

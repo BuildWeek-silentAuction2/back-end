@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const db = require('../seller_auction_model/seller_auction_model');
+const { uuid } = require('uuidv4')
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -26,6 +27,7 @@ router.post('/register', (req, res) => {
     const newSeller = req.body;
     const hash = bcrypt.hashSync(newSeller.password, 11);
     newSeller.password = hash;
+    newSeller.id = uuid();
     db.addSeller(newSeller)
         .then(seller => {
             res.status(200).json({
@@ -44,8 +46,7 @@ router.post('/login', (req, res) => {
   const { username, password } = req.body;
   db.findSellerByUsername(username)
     .then(seller => {
-      console.log(password)
-      if (seller && bcrypt.compareSync(password, seller[0].password)) {
+      if (seller && bcrypt.compareSync(password, seller.password)) {
         const token = tokenGen(seller);
         res.status(200).json({
           message: `Welcome, ${seller.username}!`,
