@@ -21,96 +21,66 @@ router.get('/', (req, res) => {
         })
 });
 
-// // router.post('/', (req, res) => {
-// //     const login = req.body;
-// //     db.addBuyer(login)
-// //         .then(buyer => {
-// //             // bcryp here 
+router.post('/register', (req, res) => {
+    const newBuyer = req.body;
+    const hash = bcrypt.hashSync(newBuyer.password, 12);
+    newBuyer.password = hash;
+    db.addBuyer(newBuyer)
+        .then(buyer => { 
+          console.log('buyer', buyer)
+            res.status(200).json({
+                data : buyer
+            })
+        })
+        .catch(err => {
+          console.log(err)
+            res.status(400).json({
+                error : err
+            })
+        })
+});
 
-// //             res.status(200).json({
-// //                 data : buyer
-// //             })
-// //         })
-// //         .catch(err => {
-// //             res.status(400).json({
-// //                 error : err
-// //             })
-// //         })
-// // });
+router.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  db.findBuyerByUsername(username)
+    .then(buyer => {
+      console.log(buyer)
+      if (buyer && bcrypt.compareSync(password, buyer.password)) {
+        const token = tokenGen(buyer);
+        res.status(200).json({
+          message: `Welcome, ${buyer.username}!`,
+          token
+        })
+      } else {
+        res.status(401).json({
+          message: 'Invalid credentials.'
+        })
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({
+        error : err
+      })
+    })
+});
 
-// // router.put('/:id', (req, res) => {
-// //     const { id } = req.params;
-// //     const changes = req.body;
-// router.post('/register', (req, res) => {
-//     const newBuyer = req.body;
-//     const hash = bcrypt.hashSync(newBuyer.password, 12);
-//     newBuyer.password = hash;
-//     db.addBuyer(newBuyer)
-//         .then(buyer => { 
-//             res.status(200).json({
-//                 data : buyer
-//             })
-//         })
-//         .catch(err => {
-//             res.status(400).json({
-//                 error : err
-//             })
-//         })
-// });
-
-// router.post('/login', (req, res) => {
-//   const { username, password } = req.body;
-//   db.findById(username)
-//     .then((buyer) => {
-//       if (buyer && bcrypt.compareSync(password, buyer.password)) {
-//         const token = tokenGen(buyer);
-//         res.status(200).json({
-//           message: `Welcome, ${buyer.username}!`,
-//           token
-//         })
-//       } else {
-//         res.status(401).json({
-//           message: 'Invalid credentials.'
-//         })
-//       }
-//     })
-// })
-
-// router.put('/:id', (req, res) => {
-//     const { id } = req.params;
-//     const changes = req.body;
+router.delete('/:id', (req, res) => {
+    const { id } = req.params;
   
-//     db.findById(id)
-//     .then(bid => {
-//       if (bid) {
-//         db.update(changes, id)
-//         .then(updatedBuyer => {
-//           res.status(200).json({ data : updatedBuyer});
-//         });
-//       } else {
-//         res.status(404).json({ message: 'Could not find buyer with given id' });
-//       }
-//     })
-//     .catch (err => {
-//       res.status(500).json({ message: 'Failed to update buyer' });
-//     });
-//   });
+    db.removeBuyer(id)
+    .then(deleted => {
+      if (deleted) {
+        res.json({ removed: deleted });
+      } else {
+        res.status(404).json({ message: 'Could not find buyer with given id' });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'Failed to delete buyer' });
+    });
+  });
 
 
-// router.delete('/:id', (req, res) => {
-//     const { id } = req.params;
-  
-//     db.remove(id)
-//     .then(deleted => {
-//       if (deleted) {
-//         res.json({ removed: deleted });
-//       } else {
-//         res.status(404).json({ message: 'Could not find buyer with given id' });
-//       }
-//     })
-//     .catch(err => {
-//       res.status(500).json({ message: 'Failed to delete buyer' });
-//     });
-//   });
 
 module.exports = router;
