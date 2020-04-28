@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const db = require();
+const db = require('../seller_auction_model/seller_auction_model');
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -27,11 +27,13 @@ router.post('/register', (req, res) => {
     newBuyer.password = hash;
     db.addBuyer(newBuyer)
         .then(buyer => { 
+          console.log('buyer', buyer)
             res.status(200).json({
                 data : buyer
             })
         })
         .catch(err => {
+          console.log(err)
             res.status(400).json({
                 error : err
             })
@@ -40,8 +42,9 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
-  db.findById(username)
-    .then((buyer) => {
+  db.findBuyerByUsername(username)
+    .then(buyer => {
+      console.log(buyer)
       if (buyer && bcrypt.compareSync(password, buyer.password)) {
         const token = tokenGen(buyer);
         res.status(200).json({
@@ -54,33 +57,18 @@ router.post('/login', (req, res) => {
         })
       }
     })
-})
-
-router.put('/:id', (req, res) => {
-    const { id } = req.params;
-    const changes = req.body;
-  
-    db.findById(id)
-    .then(bid => {
-      if (bid) {
-        db.update(changes, id)
-        .then(updatedBuyer => {
-          res.status(200).json({ data : updatedBuyer});
-        });
-      } else {
-        res.status(404).json({ message: 'Could not find buyer with given id' });
-      }
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({
+        error : err
+      })
     })
-    .catch (err => {
-      res.status(500).json({ message: 'Failed to update buyer' });
-    });
-  });
-
+});
 
 router.delete('/:id', (req, res) => {
     const { id } = req.params;
   
-    db.remove(id)
+    db.removeBuyer(id)
     .then(deleted => {
       if (deleted) {
         res.json({ removed: deleted });
@@ -92,5 +80,7 @@ router.delete('/:id', (req, res) => {
       res.status(500).json({ message: 'Failed to delete buyer' });
     });
   });
+
+
 
 module.exports = router;

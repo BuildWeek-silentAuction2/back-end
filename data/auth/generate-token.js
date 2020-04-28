@@ -8,11 +8,15 @@ const tokenGen = (user) => {
         username: user.username
     }
 
+    const secret = process.env.AUTH_SECRET || 'keep it secret';
+
     const options = {
         expiresIn: '1h'
-    }
+    };
+
+    console.log(payload)
     
-    return jwt.sign(payload, process.env.AUTH_SECRET, options);
+    return jwt.sign(payload, secret, options);
 }
 
 module.exports = tokenGen;

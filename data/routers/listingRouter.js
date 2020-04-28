@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const db = require();
+const db = require('../seller_auction_model/seller_auction_model');
 
 router.get('/', (req, res) => {
     db.getAllListings()
@@ -24,6 +24,7 @@ router.post('/', (req, res) => {
             })
         })
         .catch(err => {
+          console.log(err)
             res.status(500).json({
                 error : err
             })
@@ -33,12 +34,11 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     const changes = req.body;
-  
-    db.findById(id)
+    db.findListingById(id)
     .then(listing => {
       if (listing) {
-        db.update(changes, id)
-        .then(updateListing => {
+        db.updateListing(id, changes)
+        .then(updatedListing => {
           res.status(200).json({
               data : updatedListing
             });
@@ -55,7 +55,7 @@ router.put('/:id', (req, res) => {
   router.delete('/:id', (req, res) => {
     const { id } = req.params;
   
-    db.remove(id)
+    db.removeListing(id)
     .then(deleted => {
       if (deleted) {
         res.json({ removed: deleted });
