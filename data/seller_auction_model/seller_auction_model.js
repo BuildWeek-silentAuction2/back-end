@@ -50,7 +50,7 @@ function getAllListings() {
 };
 
 function addSeller(seller) {
-    return db('sellers').insert(seller)
+    return db('sellers').insert(seller, 'id')
 };
 
 function findBuyerByUsername(username){
@@ -58,15 +58,15 @@ function findBuyerByUsername(username){
 };
 
 function addAuction (item){
-    return db('auctions').insert(item)
+    return db('auctions').insert(item, 'id')
 };
 
 function addListing(item) {
-    return db('listings').insert(item)
+    return db('listings').insert(item, 'id')
 };
 
 function addBid(item) {
-    return db('bids').insert(item)
+    return db('bids').insert(item, 'id')
 };
 
 function findSellerByUsername(username) {
@@ -125,7 +125,7 @@ function removeBid(id) {
 };
 
 function addBuyer(item) {
-    return db('buyers').insert(item)
+    return db('buyers').insert(item, 'id')
 };
 
 function removeBuyer(id) {
