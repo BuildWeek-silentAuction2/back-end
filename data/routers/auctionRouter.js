@@ -17,6 +17,11 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     const item = req.body;
+    if (!item.end_time.match(/[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):([0-5][0-9]:[0-5][0-9])/g)) {
+      res.status(400).json({
+        message: 'Invalid date'
+      })
+    }
     db.addAuction(item)
         .then(auction => {
             res.status(200).json({
@@ -34,6 +39,11 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     const changes = req.body;
+    if (changes.end_time && !changes.end_time.match(/[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):([0-5][0-9]:[0-5][0-9])/g)) {
+      res.status(400).json({
+        message: 'Invalid date'
+      })
+    }
     db.findAuctionById(id)
     .then(auction => {
       
@@ -47,7 +57,7 @@ router.put('/:id', (req, res) => {
         })
         .catch(err => {
           res.status(400).json({
-            error : 'couldnt change records'
+            error : 'Couldn't change records'
           })
         });
       } else {

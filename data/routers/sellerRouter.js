@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const db = require('../seller_auction_model/seller_auction_model');
-const { uuid } = require('uuidv4')
+const { uuid } = require('uuidv4');
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -9,7 +9,6 @@ const authenticator = require('../auth/auth-middleware.js');
 const tokenGen = require('../auth/generate-token');
 
 router.get('/', (req, res) => {
-  console.log('fsdf')
     db.getAllSellers()
         .then(sellers => {
             res.status(200).json({
