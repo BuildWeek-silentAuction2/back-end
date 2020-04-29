@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const db = require('../seller_auction_model/seller_auction_model');
 
-router.get('/', (req, res) => {
+const authenticator = require('../auth/auth-middleware.js');
+
+router.get('/', authenticator, (req, res) => {
     db.getAllAuctions()
         .then(auctions => {
             res.status(200).json({
@@ -15,7 +17,7 @@ router.get('/', (req, res) => {
         })
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', authenticator, (req, res) => {
   const { id } = req.params;
   db.findAuctionById(id)
     .then(auction => {
@@ -30,7 +32,7 @@ router.get('/:id', (req, res) => {
     })
 })
 
-router.post('/', (req, res) => {
+router.post('/', authenticator, (req, res) => {
     const item = req.body;
     if (!item.end_time.match(/[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):([0-5][0-9]:[0-5][0-9])/g)) {
       res.status(400).json({
@@ -51,7 +53,7 @@ router.post('/', (req, res) => {
         })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', authenticator, (req, res) => {
     const { id } = req.params;
     const changes = req.body;
     if (changes.end_time && !changes.end_time.match(/[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):([0-5][0-9]:[0-5][0-9])/g)) {
@@ -84,7 +86,7 @@ router.put('/:id', (req, res) => {
     });
   });
 
-  router.delete('/:id', (req, res) => {
+  router.delete('/:id', authenticator, (req, res) => {
     const { id } = req.params;
   
     db.removeAuction(id)

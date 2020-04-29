@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 const authenticator = require('../auth/auth-middleware.js');
 const tokenGen = require('../auth/generate-token');
 
-router.get('/', (req, res) => {
+router.get('/', authenticator, (req, res) => {
     db.getAllBuyers()
         .then(buyer => {
             res.status(200).json({
@@ -64,7 +64,7 @@ router.post('/login', (req, res) => {
     })
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:id', authenticator, (req, res) => {
     const { id } = req.params;
     const changes = req.body;
     if (changes.password) {
@@ -88,7 +88,7 @@ router.put('/:id', (req, res) => {
   });
 
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authenticator, (req, res) => {
     const { id } = req.params;
   
     db.removeBuyer(id)

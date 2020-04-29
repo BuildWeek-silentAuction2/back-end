@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const db = require('../seller_auction_model/seller_auction_model');
 
-router.get('/', (req, res) => {
+const authenticator = require('../auth/auth-middleware.js');
+
+router.get('/', authenticator, (req, res) => {
     db.getAllListings()
         .then(listing => {
             res.status(200).json({
@@ -15,7 +17,7 @@ router.get('/', (req, res) => {
         })
 });
 
-router.post('/', (req, res) => {
+router.post('/', authenticator, (req, res) => {
     const list_item = req.body;
     db.addListing(list_item)
         .then(listing => {
@@ -31,7 +33,7 @@ router.post('/', (req, res) => {
         })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', authenticator, (req, res) => {
     const { id } = req.params;
     const changes = req.body;
     db.findListingById(id)
@@ -52,7 +54,7 @@ router.put('/:id', (req, res) => {
     });
   });
 
-  router.delete('/:id', (req, res) => {
+  router.delete('/:id', authenticator, (req, res) => {
     const { id } = req.params;
   
     db.removeListing(id)
