@@ -20,7 +20,7 @@ router.get('/:id', (req, res) => {
   db.findAuctionById(id)
     .then(auction => {
       res.status(200).json({
-        data : auction
+        data : auction[0]
       })
     })
     .catch(err => {
