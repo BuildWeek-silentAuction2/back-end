@@ -15,6 +15,21 @@ router.get('/', (req, res) => {
         })
 });
 
+router.get('/:id', (req, res) => {
+  const { id } = req.params;
+  db.findAuctionById(id)
+    .then(auction => {
+      res.status(200).json({
+        data : auction
+      })
+    })
+    .catch(err => {
+      res.status(500).json({
+          error : err
+      })
+    })
+})
+
 router.post('/', (req, res) => {
     const item = req.body;
     if (!item.end_time.match(/[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):([0-5][0-9]:[0-5][0-9])/g)) {
