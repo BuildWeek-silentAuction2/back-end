@@ -82,8 +82,8 @@ router.put('/:id', (req, res) => {
             });
         })
         .catch(err => {
-          res.status(400).json({
-            error : "couldnt find id sorry!!"
+          res.status(500).json({
+            error : "Failed to update seller"
           })
         });
       } else {
@@ -91,7 +91,7 @@ router.put('/:id', (req, res) => {
       }
     })
     .catch (err => {
-      res.status(500).json({ message: 'Failed to update seller' });
+      res.status(500).json({ message: 'Failed to retrieve seller' });
     });
   });
   
