@@ -15,7 +15,7 @@ exports.up = function(knex) {
     })
     .createTable('auctions', tbl => {
         tbl.increments();
-        tbl.timestamp('end_time').notNullable();
+        tbl.string('end_time').notNullable();
         tbl.string('seller_id').references('id').inTable('sellers').notNullable().onUpdate('CASCADE').onDelete('CASCADE');
     })
     .createTable('listings', tbl => {
@@ -28,7 +28,7 @@ exports.up = function(knex) {
     })
     .createTable('bids', tbl => {
         tbl.increments();
-        tbl.timestamp('time').notNullable();
+        tbl.string('time').notNullable();
         tbl.float('amount').notNullable();
         tbl.integer('listing_id').references('id').inTable('listings').notNullable().onUpdate('CASCADE').onDelete('CASCADE');
         tbl.string('bidder_id').references('id').inTable('buyers').notNullable().onUpdate('CASCADE').onDelete('CASCADE');
