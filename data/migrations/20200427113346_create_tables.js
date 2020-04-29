@@ -15,6 +15,7 @@ exports.up = function(knex) {
     })
     .createTable('auctions', tbl => {
         tbl.increments();
+        tbl.string('name').unique().notNullable();
         tbl.string('end_time').notNullable();
         tbl.string('seller_id').references('id').inTable('sellers').notNullable().onUpdate('CASCADE').onDelete('CASCADE');
     })
