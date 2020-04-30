@@ -8,7 +8,8 @@
     "start": "node index.js",
     "migrate": "knex migrate:latest",
     "unmigrate": "knex migrate:rollback",
-    "seed": "knex seed:run"
+    "seed": "knex seed:run",
+    "test": "cross-env DB_ENV=testing jest --watch --runInBand"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "bcrypt": "^4.0.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "helmet": "^3.22.0",
@@ -37,5 +39,11 @@
     "pg": "^8.0.3",
     "sqlite3": "^4.1.1",
     "uuidv4": "^6.0.7"
+  },
+  "devDependencies": {
+    "jest": "^25.5.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
