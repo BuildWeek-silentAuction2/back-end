@@ -11,7 +11,7 @@ const tokenGen = (user) => {
     const secret = process.env.AUTH_SECRET || 'keep it secret';
 
     const options = {
-        expiresIn: '1h'
+        expiresIn: '8h'
     };
 
     console.log(payload)
