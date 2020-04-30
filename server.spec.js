@@ -47,5 +47,15 @@ describe('database model', () => {
                 expect(test[0]).toBe(undefined);
             })
         })
+        describe('removeSeller', () => {
+            it('should return the number of sellers deleted', async () => {
+                let test = await model.removeSeller('test_id');
+                expect(test).toBe(1);
+            })
+            it('should remove the seller from the database', async () => {
+                let test = await model.findSellerById('test_id');
+                expect(test[0]).toBe(undefined);
+            })
+        })
     })
 })
