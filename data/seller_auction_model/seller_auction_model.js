@@ -27,6 +27,7 @@ module.exports = {
     updateListing,
     removeListing,
     findListingById,
+    updateBuyer
 };
 
 function getAllSellers() {
@@ -79,8 +80,8 @@ function findSellerById(id) {
 
 function updateSeller(id, changes) {
     return db('sellers')
-    .update(changes)
     .where({ id })
+    .update(changes)
 };
 
 function removeSeller(id) {
@@ -129,8 +130,14 @@ function addBuyer(item) {
 };
 
 function removeBuyer(id) {
-    return db('buyers').where({id})
+    return db('buyers').where({id}).del()
 };
+
+function updateBuyer(id, changes) {
+    return db('buyers')
+    .where({ id })
+    .update(changes)
+}
 
 function updateListing(id, changes) {
     return db('listings')
